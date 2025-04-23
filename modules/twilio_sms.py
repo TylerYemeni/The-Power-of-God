@@ -1,13 +1,18 @@
 from twilio.rest import Client
 
-def send_twilio_sms(target_number, fake_msg):
-    account_sid = 'YOUR_SID'
-    auth_token = 'YOUR_AUTH_TOKEN'
-    client = Client(account_sid, auth_token)
+# ضع بياناتك من https://twilio.com
+ACCOUNT_SID = "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+AUTH_TOKEN = "your_auth_token"
+FROM_NUMBER = "+1234567890"
 
-    message = client.messages.create(
-        body=fake_msg,
-        from_='+1XXXXXXXXXX',  # رقم Twilio الخاص بك
-        to=target_number
-    )
-    return message.sid
+def send_twilio_sms(to_number, message):
+    try:
+        client = Client(ACCOUNT_SID, AUTH_TOKEN)
+        client.messages.create(
+            body=message,
+            from_=FROM_NUMBER,
+            to=to_number
+        )
+        print("[+] تم إرسال رسالة Twilio وهمية.")
+    except Exception as e:
+        print(f"[!] فشل إرسال SMS: {e}")
