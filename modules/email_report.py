@@ -1,19 +1,29 @@
 import smtplib
-from email.message import EmailMessage
+from email.mime.text import MIMEText
 
-def send_email_report(target_email, fake_name, fake_image="samples/fake_profile.jpg", fake_audio="samples/fake_voice.mp3"):
-    msg = EmailMessage()
-    msg['Subject'] = "بلاغ عاجل - محتوى مسيء على واتساب"
-    msg['From'] = "your_email@gmail.com"  # غيّر هذا لاحقًا
-    msg['To'] = target_email
-    msg.set_content(f"نبلغ عن الرقم المزعج المرتبط بشخصية {fake_name}. التفاصيل في الملفات المرفقة.")
+EMAIL_SENDER = "youremail@gmail.com"
+EMAIL_PASSWORD = "your_app_password"
 
-    with open(fake_image, 'rb') as img:
-        msg.add_attachment(img.read(), maintype='image', subtype='jpeg', filename='profile.jpg')
-    
-    with open(fake_audio, 'rb') as aud:
-        msg.add_attachment(aud.read(), maintype='audio', subtype='mpeg', filename='voice.mp3')
+def send_email_report(to_email, fake_name):
+    subject = "إبلاغ عن حساب مزعج في واتساب"
+    body = f"""
+    مرحبًا، أود الإبلاغ عن رقم يرسل رسائل مزعجة.
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login("your_email@gmail.com", "your_password")  # غيّرها حسب بياناتك
-        smtp.send_message(msg)
+    الاسم: {fake_name}
+    الرقم المشبوه: مزعج جداً
+
+    الرجاء التحقيق، وشكرًا.
+    """
+
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = to_email
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+            print("[+] تم إرسال بلاغ إلى البريد.")
+    except Exception as e:
+        print(f"[!] فشل في إرسال البلاغ عبر البريد: {e}")
