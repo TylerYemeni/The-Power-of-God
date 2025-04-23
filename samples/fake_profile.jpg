@@ -1,0 +1,1 @@
+wget -O samples/fake_profile.jpg https://thispersondoesnotexist.com/image
