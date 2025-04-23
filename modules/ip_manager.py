@@ -1,13 +1,18 @@
-import os
 import subprocess
+import random
+import time
 
 def change_ip():
-    os.system("protonvpn-cli d")
-    os.system("protonvpn-cli c --fastest")
-
-def print_current_ip():
+    print("[~] تغيير الـ VPN ...")
     try:
-        ip = subprocess.getoutput("curl -s https://ipinfo.io/ip")
-        print(f"[+] IP الحالي: {ip}")
-    except:
-        print("[-] فشل في جلب عنوان IP")
+        subprocess.call(["protonvpn-cli", "disconnect"])
+        time.sleep(2)
+        server = random.choice(["US", "NL", "DE", "FR", "CH"])
+        subprocess.call(["protonvpn-cli", "connect", "--cc", server])
+        print(f"[+] تم الاتصال بـ VPN في {server}")
+    except Exception as e:
+        print(f"[!] خطأ في تغيير الـ VPN: {e}")
+
+def print_ip():
+    ip = subprocess.getoutput("curl -s ifconfig.me")
+    print(f"[IP] عنوانك الحالي: {ip}")
