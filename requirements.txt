@@ -1,0 +1,12 @@
+selenium
+requests
+pillow
+faker
+tk
+twilio
+playsound
+opencv-python
+protonvpn-cli
+pydub
+email-validator
+beautifulsoup4
